@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Personale Logistico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        select, input[type="number"] {
+            width: 90%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #risultato {
+            margin-top: 25px;
+            padding: 15px;
+            border: 2px solid #28a745;
+            border-radius: 4px;
+            background-color: #e2f0e8;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .dettagli {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Calcolatore Personale Necessario</h2>
+
+    <label for="selettoreCompagnia">Seleziona Compagnia:</label>
+    <select id="selettoreCompagnia" onchange="calcolaPersonale()">
+        <option value="Grimaldi">Grimaldi (Scarico 22, Carico 16, Auto 40)</option>
+        <option value="GNV">GNV (Scarico 25, Carico 19, Auto 40*)</option>
+    </select>
+
+    <label for="semirimorchiScarico">Semirimorchi di Scarico (Pezzi):</label>
+    <input type="number" id="semirimorchiScarico" value="100" min="0" oninput="calcolaPersonale()">
+
+    <label for="semirimorchiCarico">Semirimorchi di Carico (Pezzi):</label>
+    <input type="number" id="semirimorchiCarico" value="50" min="0" oninput="calcolaPersonale()">
+
+    <label for="autoSbarcare">Auto da Sbarcare (Unità):</label>
+    <input type="number" id="autoSbarcare" value="80" min="0" oninput="calcolaPersonale()">
+
+    <button onclick="calcolaPersonale()">Calcola Personale</button>
+
+    <div id="risultato">Inserisci i dati e calcola</div>
+    <div id="dettagli" class="dettagli"></div>
+</div>
+
+<script>
+    // ** TASSI DI PRODUTTIVITÀ **
+    // Definizione dei tassi di produttività (Capacità per operaio) per compagnia
+    const TASSI_PRODUTTIVITA = {
+        'Grimaldi': {
+            SCARICO: 22, // Semirimorchi di scarico per operaio
+            CARICO: 16,  // Semirimorchi di carico per operaio
+            AUTO: 40     // Auto da sbarcare per operaio
+        },
+        'GNV': {
+            SCARICO: 25, // Semirimorchi di scarico per operaio
+            CARICO: 19,  // Semirimorchi di carico per operaio
+            AUTO: 40     // **ASSUNZIONE:** Mantenuto 40, in attesa del dato GNV Auto
+        }
+    };
+
+    function calcolaPersonale() {
+        // 1. Recupero della compagnia selezionata e dei tassi
+        const compagniaSelezionata = document.getElementById('selettoreCompagnia').value;
+        const tassi = TASSI_PRODUTTIVITA[compagniaSelezionata];
+        
+        // 2. Recupero dei valori inseriti dall'utente
+        const ns = parseFloat(document.getElementById('semirimorchiScarico').value) || 0;
+        const nl = parseFloat(document.getElementById('semirimorchiCarico').value) || 0;
+        const na = parseFloat(document.getElementById('autoSbarcare').value) || 0;
+
+        // 3. Calcolo dei requisiti di personale per ciascuna attività
+        const operaiScarico = ns / tassi.SCARICO;
+        const operaiCarico = nl / tassi.CARICO;
+        const operaiAuto = na / tassi.AUTO;
+
+        // 4. Somma dei requisiti totali di personale (numero con decimali)
+        const operaiTotaliDecimali = operaiScarico + operaiCarico + operaiAuto;
+
+        // 5. Arrotondamento per eccesso (CEIL)
+        const operaiTotali = Math.ceil(operaiTotaliDecimali);
+
+        // 6. Visualizzazione del risultato e dei dettagli
+        const risultatoElement = document.getElementById('risultato');
+        const dettagliElement = document.getElementById('dettagli');
+
+        if (operaiTotali === 0 && (ns > 0 || nl > 0 || na > 0)) {
+             risultatoElement.innerHTML = `Personale Necessario: **1** operaio.`;
+        } else if (operaiTotali === 0 && ns === 0 && nl === 0 && na === 0) {
+            risultatoElement.innerHTML = `Personale Necessario: **0** operai.`;
+        } else {
+             risultatoElement.innerHTML = `Personale Necessario: **${operaiTotali}** operai.`;
+        }
+        
+        dettagliElement.innerHTML = `
+            **Tassi usati (${compagniaSelezionata}):**<br>
+            - Scarico: 1 operaio ogni ${tassi.SCARICO} pezzi.<br>
+            - Carico: 1 operaio ogni ${tassi.CARICO} pezzi.<br>
+            - Auto: 1 operaio ogni ${tassi.AUTO} auto.<br>
+            <br>
+            **Personale teorico (decimali):** ${operaiTotaliDecimali.toFixed(2)}
+        `;
+    }
