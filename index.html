@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calcolo Efficienza</title>
+    
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Calcolo Efficienza e Bonus</h1>
+        <p class="text-sm text-gray-500 mb-6 text-center">Inserisci i dati per l'analisi del personale e la simulazione del bonus.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            
+            <div class="input-group">
+                <label for="company">Compagnia</label>
+                <select id="company" onchange="calculate()">
+                    <option value="Gnv">Gnv</option>
+                    <option value="Grimaldi">Grimaldi</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="totalStaffAvailable">Personale Totale in Nota</label>
+                <input type="number" id="totalStaffAvailable" min="1" oninput="calculate()">
+            </div>
+
+            <div class="input-group">
+                <label for="piecesSbarco">Pezzi Sbarco</label>
+                <input type="number" id="piecesSbarco" min="0" oninput="calculate()">
+            </div>
+            
+            <div class="input-group">
+                <label for="piecesCarico">Pezzi Imbarco</label>
+                <input type="number" id="piecesCarico" min="0" oninput="calculate()">
+            </div>
+
+            <div class="input-group col-span-1 md:col-span-2">
+                <label for="piecesAuto">Numero di Autovetture</label>
+                <input type="number" id="piecesAuto" min="0" oninput="calculate()">
+            </div>
+        </div>
+        
+        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-t pt-4">Risultati dell'Analisi</h2>
+
+        <div class="space-y-3">
+            <div class="result-box bg-blue-100 text-blue-800">
+                <p class="text-sm font-normal">Personale Teorico Totale Necessario</p>
+                <p id="resultPersonnelRequired" class="text-2xl mt-1">0.00</p>
+            </div>
+
+            <div class="result-box" id="containerStaffDeficit">
+                <p class="text-sm font-normal" id="labelStaffDeficit">Deficit/Surplus Personale (in Nota vs Teorico)</p>
+                <p id="resultStaffDeficit" class="text-2xl mt-1">0.00</p>
+            </div>
+
+            <div class="result-box bg-green-100 text-green-800">
+                <p class="text-sm font-normal">Pezzi Extra Caricati (Misura Efficienza)</p>
+                <p id="resultPiecesExtra" class="text-2xl mt-1">0.00</p>
+            </div>
+            
+            <div class="result-box bg-yellow-100 text-yellow-800 border-2 border-yellow-500">
+                <p class="text-sm font-normal">Bonus Per Operatore (Cifra Netta)</p>
+                <p id="resultBonusPerEmployee" class="text-2xl mt-1">0.00 €</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-6 pt-4 border-t border-gray-200">
+            <p class="text-xs text-gray-400">Sviluppato da: Ivan/163</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

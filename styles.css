@@ -1,0 +1,58 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f9fb;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+}
+.input-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* ********** Correzioni anti-zoom e responsive ********** */
+
+.input-group input, 
+.input-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Forza font-size per impedire lo zoom iOS */
+    font-size: 16px !important; 
+}
+
+/* ******************************************************* */
+
+.input-group input:focus, .input-group select:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+.result-box {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-top: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Regole Deficit/Surplus (aggiunte da te nel JS, ma potrebbero essere qui se usi Tailwind, non è essenziale cambiarle se funzionano) */
+
+.bg-red-100 { background-color: #fee2e2; } /* Esempio di classe */
+.text-red-700 { color: #b91c1c; }           /* Esempio di classe */
+.bg-green-100 { background-color: #d1fae5; } /* Esempio di classe */
+.text-green-700 { color: #047857; }         /* Esempio di classe */
